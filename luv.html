@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Do You Love Me? ❤️</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute;
+            color: rgba(255, 71, 87, 0.6);
+            font-size: 20px;
+            animation: float 4s linear infinite;
+            top: 100%;
+            z-index: 0;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-100vh) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px;
+            border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 450px;
+            width: 90%;
+            z-index: 10;
+        }
+
+        .media-container img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        h1 {
+            color: #d63384;
+            font-size: 26px;
+            margin-bottom: 30px;
+            min-height: 60px;
+        }
+
+        .buttons {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 30px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        #yesBtn {
+            background-color: #ff4757;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+        }
+
+        #noBtn {
+            background-color: #747d8c;
+            color: white;
+        }
+
+        button:active {
+            transform: scale(0.9);
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="yesSound">
+        <source src="love.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="noSound">
+        <source src="no.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container" id="mainContainer">
+        <div class="media-container">
+            <img id="displayImg" src="1.png" alt="Expressive Image">
+        </div>
+        <h1 id="questionText">Do U Luv Me?</h1>
+        
+        <div class="buttons" id="btnGroup">
+            <button id="yesBtn" onclick="handleYes()">Yes</button>
+            <button id="noBtn" onclick="handleNo()">No</button>
+        </div>
+    </div>
+
+    <script>
+        let step = 0;
+        
+        // No click korle text gulo
+        const noMessages = [
+            "Abar vebe dekho? 🥺",
+            "Ektu to bhalobasho! 😢",
+            "Please na bolo na... 💔",
+            "Tumi ki nishchit? 🙄",
+            "Mano ar na mano, tumi amakei bhalobasho! ❤️"
+        ];
+
+        // No click korle image/gif gulo change hobe
+        const images = ["2.png", "3.png", "4.png", "5.png", "6.png"];
+
+        const displayImg = document.getElementById('displayImg');
+        const questionText = document.getElementById('questionText');
+        const btnGroup = document.getElementById('btnGroup');
+        const yesBtn = document.getElementById('yesBtn');
+        const yesSound = document.getElementById('yesSound');
+        const noSound = document.getElementById('noSound');
+
+        // Background Heart Animation
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+            heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 4000);
+        }
+        setInterval(createHeart, 400);
+
+        // No Button Function
+        function handleNo() {
+            // No sound play
+            noSound.currentTime = 0;
+            noSound.play().catch(e => console.log("No sound error"));
+
+            if (step < noMessages.length) {
+                questionText.innerText = noMessages[step];
+                displayImg.src = images[step];
+                
+                // Yes button ti boro kora (Convincing Step)
+                let currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+                yesBtn.style.fontSize = (currentSize + 10) + 'px';
+                yesBtn.style.padding = (currentSize + 5) + 'px ' + (currentSize * 2.5) + 'px';
+                
+                step++;
+            } else {
+                // Loop: Step 5 er por abar prothom theke suru
+                step = 0;
+                questionText.innerText = "Please ebar ha bole dao! ✨";
+                displayImg.src = "1.png";
+            }
+        }
+
+        // Yes Button Function
+        function handleYes() {
+            // Yes sound play
+            yesSound.currentTime = 0;
+            yesSound.play().catch(e => console.log("Love sound error"));
+            
+            questionText.innerText = "I Knew It! I Love You Too Much! ❤️";
+            displayImg.src = "success.png"; // Success image/gif
+            btnGroup.style.display = "none"; // Buttons gayeb hoye jabe
+            
+            // Celebration: Beshi kore heart urbe
+            setInterval(createHeart, 100);
+        }
+    </script>
+</body>
+</html>
